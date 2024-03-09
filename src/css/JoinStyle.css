@@ -1,0 +1,63 @@
+.labelStyle {
+  margin-top: 10px;
+  margin-left: 5px;
+  font-size: 14px;
+}
+.textStyle {
+  font-size: 16px;
+  margin: 4px;
+  position: relative;
+  width: 300px;
+  height: 30px;
+  border-radius: 8px;
+  border: 3px;
+  background-color: rgb(240, 240, 240);
+}
+.passwordStyle {
+  font-size: 16px;
+  margin: 4px;
+  position: relative;
+  width: 300px;
+  height: 30px;
+  border-radius: 8px;
+  border: 3px;
+  background-color: rgb(240, 240, 240);
+}
+.phoneNumberStyle {
+  font-size: 16px;
+  margin: 4px;
+  position: relative;
+  width: 300px;
+  height: 30px;
+  border-radius: 8px;
+  border: 3px;
+  background-color: rgb(240, 240, 240);
+}
+.emailStyle {
+  font-size: 16px;
+  margin: 4px;
+  position: relative;
+  width: 300px;
+  height: 30px;
+  border-radius: 8px;
+  border: 3px;
+  background-color: rgb(240, 240, 240);
+}
+
+.buttonStyle {
+  font-size: 16px;
+  margin: 4px;
+  position: relative;
+  width: 300px;
+  height: 30px;
+  top: 5px;
+  color: white;
+  border-radius: 8px;
+  border: 3px black;
+  background-color: black;
+  cursor: pointer;
+}
+
+.buttonStyle:hover {
+  background-color: #a3a3a3;
+}
