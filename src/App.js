@@ -18,10 +18,9 @@ function App() {
           })}
         </Routes>
       </div>
-      {/* <Footer /> */}
+      {<Footer />}
     </Router>
   );
 }
 
 export default App;
-
