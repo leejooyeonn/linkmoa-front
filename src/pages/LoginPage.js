@@ -7,7 +7,6 @@ import naver from "../image/naver.png";
 import "../css/LoginStyle.css";
 import Logo from "../components/Logo";
 
-
 function LoginPage() {
   //상태 변화를 기록하기 위함.
     const [inputId, setInputId] = useState("");
