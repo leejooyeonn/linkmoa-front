@@ -1,10 +1,20 @@
 import React from "react";
-import logo from "../image/logo.png";
+import logo from "../image/logo_name.png";
 
 const Logo = () => {
-    return (
-        <img src={logo} alt="logo" className="logo" style={{ width: "70px", height: "auto", marginLeft: "20px", marginTop: "20px" }} />
-    );
+  return (
+    <img
+      src={logo}
+      alt="logo"
+      className="logo"
+      style={{
+        width: "150px",
+        height: "auto",
+        marginLeft: "5px",
+        marginTop: "5px",
+      }}
+    />
+  );
 };
 
 export default Logo;

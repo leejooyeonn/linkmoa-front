@@ -76,8 +76,28 @@ function JoinPage() {
       alert("모든 필드를 입력하세요.");
       return;
     }
+    fetch("localhost:8080/auth/sign-up", {
+      //원하는 주소 입력
+      method: "post",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        name: UserName,
+        email: Email,
+        password: Password,
+        phoneNumber: PhoneNumber,
+      }),
+    })
+      .then((res) => res.json())
+      .then((resonse) => {
+        if (resonse === 200) {
+          window.location.replace("/");
+        } else {
+          alert("다시 시도해주세요");
+        }
+      });
     alert("회원가입 성공!");
-    navigate("/");
   };
   return (
     <div
