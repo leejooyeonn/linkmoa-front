@@ -76,7 +76,7 @@ function JoinPage() {
       alert("모든 필드를 입력하세요.");
       return;
     }
-    fetch("localhost:8080/auth/sign-up", {
+    fetch("http://localhost:8080/auth/sign-up", {
       //원하는 주소 입력
       method: "post",
       headers: {
@@ -89,15 +89,17 @@ function JoinPage() {
         phoneNumber: PhoneNumber,
       }),
     })
-      .then((res) => res.json())
-      .then((resonse) => {
-        if (resonse === 200) {
-          window.location.replace("/");
+      .then((res) => {
+        if (res.ok) {
+          alert("회원가입 성공!");
+          navigate("/");
         } else {
-          alert("다시 시도해주세요");
+          throw new Error("네트워크 오류 발생");
         }
+      })
+      .catch((error) => {
+        console.error("오류 발생:", error);
       });
-    alert("회원가입 성공!");
   };
   return (
     <div
