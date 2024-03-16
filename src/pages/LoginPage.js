@@ -1,44 +1,98 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import google from "../image/google.png";
-import kakao from "../image/kakao.png";
-import naver from "../image/naver.png";
-import "../css/LoginStyle.css";
+import "../css/JoinStyle.css";
 import Logo from "../components/Logo";
 
-function LoginPage() {
-  //상태 변화를 기록하기 위함.
-  const [inputId, setInputId] = useState("");
-  const [inputPw, setInputPw] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate(); // useNavigate 훅을 사용
+function JoinPage() {
+  const navigate = useNavigate();
 
-  const handleInputId = (e) => {
-    setInputId(e.target.value);
-  }; // e : 이벤트 객체 - 이벤트가 발생하면, 이벤트가 발생한 요소의 현재값(사용자가 입력한 값)으로 inputId 상태 업데이트.
+  const [UserName, setUserName] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
+  const [PhoneNumber, setPhoneNumber] = useState("");
 
-  const handleInputPw = (e) => {
-    setInputPw(e.target.value);
+  const [NameValid, setNameValid] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(false);
+  const passwordRegEx =
+    /^(?=.*[0-9]{4,})(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
+  const [passwordMatch, setPasswordMatch] = useState(false);
+  const [EmailValid, setEmailValid] = useState(false);
+  const emailRegEx =
+    /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/i;
+  const [PhoneValid, setPhoneValid] = useState(false);
+  const phoneRegEx = /^\d{3}\d{3,4}\d{4}$/;
+
+  const HandleInputUserName = (e) => {
+    const name = e.target.value;
+    setUserName(name);
+    if (name.trim() === "" || name.length < 2) {
+      setNameValid(false);
+    } else {
+      setNameValid(true);
+    }
   };
 
-  const onClickLogin = (e) => {
+  const HandleInputEmail = (e) => {
+    const email = e.target.value;
+    setEmail(email);
+    if (emailRegEx.test(email)) {
+      setEmailValid(true);
+    } else {
+      setEmailValid(false);
+    }
+  };
+
+  const HandleInputPassword = (e) => {
+    const Password = e.target.value;
+    setPassword(Password);
+    if (passwordRegEx.test(Password)) {
+      setPasswordValid(true);
+    } else {
+      setPasswordValid(false);
+    }
+  };
+
+  const HandleInputConfirmPassword = (e) => {
+    //비밀번호 확인
+    const confirmPassword = e.target.value;
+    setConfirmPassword(confirmPassword);
+    setPasswordMatch(confirmPassword === Password);
+  };
+
+  const HandleInputPhoneNumber = (e) => {
+    const phone = e.target.value;
+    setPhoneNumber(phone);
+    if (phoneRegEx.test(phone)) {
+      setPhoneValid(true);
+    } else {
+      setPhoneValid(false);
+    }
+  };
+
+  const onClickSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/auth/login", {
+    if (!UserName || !Email || !Password || !PhoneNumber) {
+      alert("모든 필드를 입력하세요.");
+      return;
+    }
+    fetch("http://localhost:8080/auth/sign-up", {
       //원하는 주소 입력
       method: "post",
       headers: {
         "content-type": "application/json",
       },
       body: JSON.stringify({
-        email: inputId,
-        password: inputPw,
+        name: UserName,
+        email: Email,
+        password: Password,
+        phoneNumber: PhoneNumber,
       }),
     })
       .then((res) => {
         if (res.ok) {
-          alert("로그인 성공!");
-          navigate("/main");
+          alert("회원가입 성공!");
+          navigate("/");
         } else {
           throw new Error("네트워크 오류 발생");
         }
@@ -47,89 +101,148 @@ function LoginPage() {
         console.error("오류 발생:", error);
       });
   };
-
-  const onClickRegister = () => {
-    navigate("/Join");
-  };
-
-  const onNaverLogin = () => {
-    window.location.href = "http://localhost:8080/login/oauth2/code/naver";
-  };
-  const onGoogleLogin = () => {
-    window.location.href = "http://localhost:8080/login/oauth2/code/google";
-  };
-
-  const handleGoogleLoginSuccess = () => {
-    setIsLoggedIn(true);
-  };
   return (
-    <div>
-      <Logo />
-      <div
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        marginTop: "100px",
+      }}
+    >
+      <section
         style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          paddingLeft: "60px",
+          paddingRight: "60px",
           width: "100%",
-          marginTop: "200px",
+          margin: "0 auto",
+          overflow: "visible",
         }}
       >
-        <form
-          style={{ display: "flex", flexDirection: "column" }}
-          onSubmit={onClickLogin}
-        >
-          <h1 style={{ textAlign: "center" }}>로그인</h1>
-          <label className="labelStyle">UserName</label>
-          <input
-            type="text"
-            value={inputId}
-            onChange={handleInputId}
-            className="textStyle"
-            placeholder="아이디를 입력하세요"
-          />
-          <label className="labelStyle">Password</label>
-          <input
-            type="password"
-            value={inputPw}
-            onChange={handleInputPw}
-            className="passwordStyle"
-            placeholder="비밀번호를 입력하세요"
-          />
-          <br />
-          <button type="submit" className="buttonStyle">
-            Login
-          </button>
+        <div style={{ width: "100%", borderRadius: "4px" }}>
+          <div style={{ width: "100%", maxWidth: "1260px", margin: "0 auto" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <form
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+                onSubmit={onClickSubmit}
+              >
+                <h1 style={{ textAlign: "center" }}>회원가입</h1>
+                <label class="labelStyle">이름</label>
+                <input
+                  type="text"
+                  value={UserName}
+                  onChange={HandleInputUserName}
+                  placeholder={"이름을 입력하세요."}
+                  class="textStyle"
+                />
 
-          <button
-            type="button"
-            onClick={onClickRegister}
-            className="buttonStyle"
-          >
-            회원가입
-          </button>
-        </form>
-      </div>
-      <hr />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "10px",
-        }}
-      >
-        <a href="https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code">
-          <img src={kakao} alt="kakao" width="50" className="imageStyle" />
-        </a>
-        <a href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=gmBsMYDBOlDZr8ruJuQb&scope=name%20email&state=JFVxqf7_F6KjMvojnDNwJCGVYeB5JZrYeT5SDQIY1Rc%3D&redirect_uri=http://localhost:8080/login/oauth2/code/naver">
-          <img src={naver} alt="naver" width="50" className="imageStyle" />
-        </a>
-        <a href="https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?response_type=code&client_id=377262399790-22fej88tjrehtu9krk5q0aa8bv6e5lp6.apps.googleusercontent.com&scope=profile%20email&state=L1x0ypyye_UT5F5HW6OU6UJxIO4VLZEha_mwqqgtjXM%3D&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Flogin%2Foauth2%2Fcode%2Fgoogle&service=lso&o2v=2&theme=mn&flowName=GeneralOAuthFlow">
-          <img src={google} alt="google" width="50" className="imageStyle" />
-        </a>
-      </div>
+                {UserName && (
+                  <div
+                    className={NameValid ? "valid-message" : "invalid-message"}
+                  >
+                    {NameValid
+                      ? "이름이 유효합니다."
+                      : "이름이 유효하지 않습니다."}
+                  </div>
+                )}
+
+                <label class="labelStyle">이메일</label>
+                <input
+                  type="email"
+                  onChange={HandleInputEmail}
+                  placeholder={"이메일을 입력하세요. "}
+                  class="emailStyle"
+                />
+                {Email && (
+                  <div
+                    className={EmailValid ? "valid-message" : "invalid-message"}
+                  >
+                    {EmailValid
+                      ? "이메일 형식이 유효합니다."
+                      : "이메일 형식이 유효하지 않습니다.이메일 형식이 유효하지 않습니다."}
+                  </div>
+                )}
+                <label class="labelStyle">비밀번호</label>
+                <input
+                  type="password"
+                  value={Password}
+                  onChange={HandleInputPassword}
+                  placeholder={"비밀번호를 입력하세요. "}
+                  class="passwordStyle"
+                />
+                {Password && (
+                  <div
+                    className={
+                      passwordValid ? "valid-message" : "invalid-message"
+                    }
+                  >
+                    {passwordValid
+                      ? "비밀번호 형식이 유효합니다."
+                      : "비밀번호는 8자 이상, 하나 이상의 특수문자, 최소 4개의 숫자를 포함해야 합니다."}
+                  </div>
+                )}
+                <label class="labelStyle">비밀번호 확인</label>
+                <input
+                  type="password"
+                  value={ConfirmPassword}
+                  onChange={HandleInputConfirmPassword}
+                  placeholder={"비밀번호를 확인하세요. "}
+                  class="passwordStyle"
+                />
+                {ConfirmPassword && (
+                  <div
+                    className={
+                      passwordMatch ? "valid-message" : "invalid-message"
+                    }
+                  >
+                    {passwordMatch
+                      ? "비밀번호가 일치합니다."
+                      : "비밀번호가 일치하지 않습니다."}
+                  </div>
+                )}
+
+                <label class="labelStyle">전화번호</label>
+                <input
+                  type="tel"
+                  value={PhoneNumber}
+                  onChange={HandleInputPhoneNumber}
+                  placeholder={"전화번호를 입력하세요. "}
+                  class="phoneNumberStyle"
+                />
+                {PhoneNumber && (
+                  <div
+                    className={PhoneValid ? "valid-message" : "invalid-message"}
+                  >
+                    {PhoneValid
+                      ? "전화번호 형식이 유효합니다."
+                      : "전화번호 형식이 유효하지 않습니다."}
+                  </div>
+                )}
+
+                <br />
+                <button
+                  type="submit"
+                  onChange={onClickSubmit}
+                  className="buttonStyle"
+                >
+                  회원가입
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
 
-export default LoginPage;
+export default JoinPage;

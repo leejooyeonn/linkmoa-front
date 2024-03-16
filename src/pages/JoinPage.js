@@ -135,7 +135,15 @@ function JoinPage() {
                 }}
                 onSubmit={onClickSubmit}
               >
-                <h1 style={{ textAlign: "center" }}>회원가입</h1>
+                <h1
+                  style={{
+                    textAlign: "center",
+                    fontSize: "25px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  회원가입
+                </h1>
                 <label class="labelStyle">이름</label>
                 <input
                   type="text"
